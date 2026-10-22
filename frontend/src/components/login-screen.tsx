@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { demoStorage } from "@/lib/demo-storage";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 function UserIcon() {
   return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><circle cx="12" cy="8" r="3.5" /><path d="M5 21v-2a7 7 0 0 1 14 0v2" /></svg>;
@@ -22,6 +24,7 @@ function ShieldIcon() {
 const rememberedUserKey = "remembered-username";
 
 export function LoginScreen() {
+  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
@@ -58,7 +61,8 @@ export function LoginScreen() {
     if (nextErrors.username) { usernameRef.current?.focus(); return; }
     if (nextErrors.password) { passwordRef.current?.focus(); return; }
     void saveRememberedUser(remember, username);
-    setFeedback("A tela está pronta. O login de demonstração será conectado à API na próxima etapa.");
+    setPassword("");
+    router.push("/menu/");
   }
 
   return (
@@ -80,10 +84,11 @@ export function LoginScreen() {
             <div className="input-wrap"><LockIcon /><input ref={passwordRef} id="password" name="password" type="password" placeholder="Digite sua senha" autoComplete="current-password" maxLength={128} required value={password} onChange={(event) => { setPassword(event.target.value); setErrors((previous) => ({ ...previous, password: undefined })); setFeedback(""); }} aria-invalid={Boolean(errors.password)} aria-describedby={errors.password ? "password-error" : undefined} /></div>
             {errors.password && <p className="field-error" id="password-error">{errors.password}</p>}
           </div>
-          <div className="login-options"><label className="remember-access"><input type="checkbox" checked={remember} onChange={(event) => { setRemember(event.target.checked); void saveRememberedUser(event.target.checked, username); }} /> <span>Lembrar acesso</span></label><button className="text-button" type="button" onClick={() => setFeedback("A recuperação de senha ainda não está disponível nesta demonstração.")}>Esqueci minha senha</button></div>
+          <div className="login-options"><label className="remember-access"><input type="checkbox" checked={remember} onChange={(event) => { setRemember(event.target.checked); void saveRememberedUser(event.target.checked, username); }} /> <span>Lembrar acesso</span></label><Link className="text-button" href="/recuperar-senha/">Esqueci minha senha</Link></div>
           <button className="sign-in-button" type="submit">Entrar</button>
-          <button className="biometric-button" type="button" onClick={() => setFeedback("A biometria ainda não está disponível nesta demonstração.")}><FingerprintIcon />Acessar com biometria</button>
+          <button className="biometric-button" type="button" onClick={() => setFeedback("A biometria será implementada em breve.")}><FingerprintIcon />Acessar com biometria</button>
           <p className="login-feedback" role="status" aria-live="polite">{feedback}</p>
+          <aside className="login-demo-access" aria-label="Acesso de teste"><strong>Acesso de teste</strong><dl><div><dt>Usuário</dt><dd>demo@cash.local</dd></div><div><dt>Senha</dt><dd>Cash123!</dd></div></dl><button type="button" onClick={() => { setUsername("demo@cash.local"); setPassword("Cash123!"); setErrors({}); setFeedback(""); }}>Preencher dados de teste</button><p>Acesso demonstrativo, sem autenticação real. Não use credenciais pessoais.</p></aside>
         </form>
       </div>
       <footer className="login-footer"><ShieldIcon /><span>Demonstração acadêmica. Sem dados reais.</span></footer>

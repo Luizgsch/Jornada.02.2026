@@ -9,4 +9,4 @@ Next.js com exportacao estatica e Capacitor Android. Veja `../README.md` para ar
 - `npm run android:open`: abrir projeto no Android Studio.
 - `npm run android:sync`: exige `ANDROID_API_URL` HTTPS para API real.
 
-Nao usar `next start`: este projeto nao usa servidor Next em producao. Login e regras ficarao no Spring. Ainda nao ha telas financeiras nem login funcional.
+Nao usar `next start`: este projeto nao usa servidor Next em producao. Login e regras ficarao no Spring. O formulario de acesso abre o painel `/menu/` em modo demonstrativo apos preencher os campos; isso nao autentica o usuario. Consulte `CHECKLIST.md` para funcionalidades visuais concluidas e integracoes pendentes.

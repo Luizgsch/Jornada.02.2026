@@ -1,0 +1,17 @@
+.notification-detail-shell { padding-bottom: 32px; }
+.detail-heading { display: flex; align-items: center; gap: 12px; }
+.detail-heading a { display: grid; place-items: center; flex-shrink: 0; width: 40px; min-height: 44px; border-radius: 12px; background: #e7e5e4; color: #44403b; }
+.detail-heading svg { width: 16px; height: 16px; }
+.detail-heading h1 { margin: 0; font-size: 20px; line-height: 28px; font-weight: 800; }
+.notification-detail-card { margin-top: 20px; padding: 16px; border: 1px solid #e7e5e4; border-radius: 16px; background: #fff; }
+.detail-symbol { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 12px; background: var(--accent); }
+.detail-symbol svg { width: 20px; height: 20px; }
+.detail-category { display: table; margin-top: 20px; padding: 4px 8px; border-radius: 999px; background: #fffbeb; color: #973c00; font-size: 12px; line-height: 16px; font-weight: 700; }
+.notification-detail-card h2 { margin: 16px 0 0; font-size: 20px; line-height: 28px; font-weight: 900; letter-spacing: -.025em; }
+.notification-detail-card p { margin: 12px 0 0; color: #44403b; font-size: 14px; line-height: 24px; }
+.notification-detail-card .detail-received { margin-top: 20px; color: #79716b; font-size: 12px; line-height: 16px; }
+.detail-view-account { min-height: 44px; margin-top: 20px; padding: 12px 16px; border: 0; border-radius: 12px; background: var(--accent); color: #0a0a0a; font-size: 14px; line-height: 20px; font-weight: 700; box-shadow: 0 2px 4px #0000001a; }
+.detail-view-account:hover { background: #ebba00; }
+.detail-view-account { display: inline-flex; align-items: center; text-decoration: none; }
+.detail-notice { margin: 16px 0 0; color: #57534e; font-size: 13px; line-height: 20px; }
+.detail-notice:empty { display: none; }

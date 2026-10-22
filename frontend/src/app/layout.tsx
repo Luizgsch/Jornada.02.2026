@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { NativeLifecycle } from "@/components/native-lifecycle";
+import { NotificationsProvider } from "@/components/notifications-provider";
+import { ProfileProvider } from "@/components/profile-provider";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import "./login.css";
@@ -29,7 +31,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="pt-BR"
       className={`${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col"><NativeLifecycle />{children}</body>
+      <body className="min-h-full flex flex-col"><NativeLifecycle /><NotificationsProvider><ProfileProvider>{children}</ProfileProvider></NotificationsProvider></body>
     </html>
   );
 }

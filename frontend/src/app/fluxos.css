@@ -1,0 +1,24 @@
+.flow-back { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: #44403b; text-decoration: none; font-size: 13px; font-weight: 700; }
+.flow-shell h1 { margin: 20px 0 8px; font-size: 20px; line-height: 28px; font-weight: 800; }
+.flow-card { padding: 16px; margin-top: 20px; border: 1px solid #e7e5e4; border-radius: 16px; background: #fff; }
+.flow-card h2 { margin: 20px 0 8px; font-size: 20px; line-height: 28px; font-weight: 800; }
+.flow-card > p { font-size: 13px; line-height: 22px; }
+.flow-card > .flow-value { font-size: 28px; line-height: 36px; font-weight: 900; margin: 8px 0 20px; font-variant-numeric: tabular-nums; }
+.flow-symbol { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: #fdc700; }
+.flow-search-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.flow-search-filters button { min-height: 44px; padding: 8px 12px; border: 1px solid #d6d3d1; border-radius: 12px; background: #fff; color: #44403b; font-size: 12px; font-weight: 700; }
+.flow-search-filters button[aria-pressed="true"] { background: #fdc700; border-color: #fdc700; color: #0a0a0a; }
+.flow-results { margin: 0; padding: 0; list-style: none; }
+.flow-results li { padding: 20px 0; border-bottom: 1px solid #d6d3d1; }
+.flow-results h2 { margin: 6px 0; font-size: 14px; line-height: 22px; font-weight: 800; overflow-wrap: anywhere; }
+.flow-results p { margin: 0; font-size: 12px; line-height: 20px; color: #57534e; overflow-wrap: anywhere; }
+.flow-result-kind { font-size: 12px; line-height: 20px; color: #57534e; }
+.flow-results a { display: inline-flex; align-items: center; min-height: 44px; color: #44403b; font-size: 12px; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.flow-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.recovery-shell .flow-back { margin-bottom: 24px; }
+.recovery-demo, .recovery-help { margin: 16px 0 0; color: #57534e; font-size: 12px; line-height: 20px; }
+.recovery-form { margin-top: 24px; }
+.recovery-form .sign-in-button { margin-top: 20px; }
+.recovery-step p { margin-top: 20px; color: #57534e; font-size: 13px; line-height: 22px; }
+.recovery-step .text-button { display: block; margin-top: 12px; }
+.recovery-login { display: flex; justify-content: center; align-items: center; min-height: 48px; margin-top: 24px; padding: 12px; border-radius: 12px; background: #fdc700; color: #0a0a0a; font-weight: 700; text-decoration: none; }

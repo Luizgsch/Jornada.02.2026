@@ -6,7 +6,7 @@ URL: https://luizgsch.github.io/Jornada.02.2026/
 
 O workflow `.github/workflows/pages.yml` publica o frontend estatico a cada alteracao em `frontend/` na branch `main`. O prefixo `/Jornada.02.2026` e aplicado somente no build do Pages por `PAGES_BASE_PATH`; localhost e Android continuam na raiz. Spring nao e hospedado no Pages. A pagina publica e uma demonstracao visual, sem login real.
 
-Projeto academico com interface Next.js exportada como arquivos estaticos, aplicativo Android com Capacitor e API Java/Spring Boot independente. A pagina Início reproduz visualmente o login do Figma, com validacao local e opcao de lembrar somente o usuario. Autenticacao no Spring, recuperacao, biometria e telas financeiras ainda estao pendentes. O progresso esta em `frontend/CHECKLIST.md`.
+Projeto academico com interface Next.js exportada como arquivos estaticos, aplicativo Android com Capacitor e API Java/Spring Boot independente. A pagina Início reproduz o login do Figma. Preencher usuario e senha e clicar em Entrar abre `/menu/`, painel demonstrativo com valores ficticios do prototipo. Perfil permite sair da demonstracao. Nao ha autenticacao ou protecao de rota nesta etapa. Autenticacao no Spring, recuperacao, biometria e demais telas ainda estao pendentes. O progresso esta em `frontend/CHECKLIST.md`.
 
 ## Estrutura
 
@@ -35,6 +35,12 @@ backend/
 - Sem JPA, banco, Swagger ou login nesta fase. Integraremos o banco do colega por meio da API depois de definir o contrato.
 
 ## Desenvolvimento web
+
+### Movimentações de demonstração
+
+O botão Nova movimentação abre `/movimentacao/`. Entradas e saídas são registradas somente no IndexedDB do navegador/WebView, junto de eventual arquivo PDF, PNG ou JPG (até 5 MB). Categoria e Conta principal são opções de demonstração; ainda não há catálogo vindo da API. O Menu consulta os registros locais. Os totais do Figma continuam sendo exemplos independentes, sem cálculo contábil nesta fase.
+
+Limpar os dados do site/aplicativo apaga esses registros. Nada é enviado ao Spring ou ao Cash. Listagem no Menu mostra nome do anexo; download, edição e exclusão serão definidos em etapas futuras. Use apenas informações fictícias.
 
 Requisitos: Node 24 LTS e JDK compativel. Na raiz do VS Code, executar a tarefa **CASH: iniciar frontend e backend**. Ela abre dois terminais separados e inicia o Spring com perfil `local`.
 

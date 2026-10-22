@@ -1,0 +1,36 @@
+.movement-shell { width: 100%; max-width: 384px; min-height: 100svh; margin-inline: auto; padding: max(24px, var(--safe-area-inset-top, env(safe-area-inset-top))) 20px max(24px, var(--safe-area-inset-bottom, env(safe-area-inset-bottom))); background: #f5f5f4; }
+.movement-header { display: flex; gap: 12px; align-items: center; }
+.movement-header > a { display: grid; place-items: center; flex-shrink: 0; width: 40px; min-height: 44px; border-radius: 12px; background: #e7e5e4; color: #44403b; }
+.movement-header svg { width: 16px; height: 16px; }
+.movement-header h1 { margin: 0; font-size: 20px; line-height: 28px; font-weight: 800; letter-spacing: -.025em; }
+.movement-header p { margin: 4px 0 0; color: #79716b; font-size: 12px; line-height: 16px; }
+.movement-fields { min-width: 0; margin: 0; padding: 0; border: 0; }
+.movement-type { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; margin: 20px 0; padding: 4px; border-radius: 12px; background: #e7e5e4; }
+.movement-type button { min-height: 40px; border: 0; border-radius: 8px; background: transparent; color: #79716b; font-size: 14px; line-height: 20px; font-weight: 700; }
+.movement-type button[aria-pressed="true"] { background: #fff; color: #0a0a0a; box-shadow: 0 2px 4px #0000001a; }
+.movement-field + .movement-field { margin-top: 16px; }
+.movement-field label { display: block; margin-bottom: 8px; font-size: 14px; line-height: 20px; font-weight: 600; }
+.movement-field :is(input, select, textarea) { display: block; width: 100%; max-width: 100%; min-width: 0; min-height: 50px; padding: 14px 16px; border: 1px solid #e7e5e4; border-radius: 12px; background: #fff; color: #0a0a0a; font: inherit; font-size: 14px; line-height: 20px; }
+.movement-field input[type="date"] { appearance: none; min-height: 50px; }
+.movement-field textarea { min-height: 94px; resize: vertical; }
+.movement-field :is(input, textarea)::placeholder { color: #79716b; opacity: 1; }
+.movement-field select { padding-right: 28px; }
+.movement-field [aria-invalid="true"] { border-color: #a52920; }
+.movement-attachment { margin-top: 24px; }
+.attachment-button { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 56px; width: 100%; padding: 12px; border: 1px solid #e7e5e4; border-radius: 12px; background: #fff; color: #44403b; font-size: 14px; line-height: 20px; font-weight: 700; }
+.attachment-button svg { width: 20px; height: 20px; }
+.selected-attachment { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-top: 8px; font-size: 12px; line-height: 18px; }
+.selected-attachment span { min-width: 0; overflow-wrap: anywhere; }
+.selected-attachment button { min-height: 44px; padding: 0; border: 0; background: transparent; text-decoration: underline; text-underline-offset: 3px; }
+.movement-form-actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 24px; }
+.movement-form-actions > :is(button, a) { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 12px 16px; border-radius: 12px; font-size: 14px; line-height: 20px; font-weight: 700; text-decoration: none; }
+.movement-save { border: 0; background: var(--accent); color: #0a0a0a; box-shadow: 0 2px 4px #0000001a; }
+.movement-save:hover { background: #ebba00; }
+.movement-save svg { flex-shrink: 0; width: 16px; height: 16px; }
+.movement-form-actions > a { padding-block: 11px; border: 1px solid #e7e5e4; background: #fff; }
+.movement-error { margin: 6px 0 0; color: #a52920; font-size: 12px; line-height: 18px; }
+.movement-status { margin: 16px 0 0; color: #44403b; font-size: 13px; line-height: 20px; }
+.movement-status:empty { display: none; }
+.movement-demo-note { margin: 16px 0 0; color: #79716b; font-size: 11px; line-height: 16px; }
+.movement-fields:disabled { opacity: .7; }
+@media (max-width: 359px) { .movement-shell { padding-inline: 16px; } .movement-header h1 { font-size: 18px; } .movement-form-actions { gap: 8px; } .movement-form-actions > :is(button, a) { padding-inline: 12px; font-size: 12px; } }

@@ -4,7 +4,7 @@ Projeto acadêmico de Engenharia de Software: extensão mobile do Cash, com fron
 
 ## Escopo atual autorizado
 
-Reproduzir o Figma existente, tela por tela, começando pela página **Início**, que é o login. Conferir referência e localhost entre etapas. Nesta etapa, construir interface e interações locais; autenticação padrão no Spring será integrada depois. Não simular login bem-sucedido, recuperação enviada ou biometria configurada.
+Reproduzir o Figma existente, tela por tela. **Início** é o login; **/menu** é o painel financeiro. Conferir referência e localhost entre etapas. Entrar abre o painel demonstrativo após validar preenchimento, sem autenticar. Autenticação padrão no Spring será integrada depois. Não simular recuperação enviada ou biometria configurada.
 
 ## Restrições
 
