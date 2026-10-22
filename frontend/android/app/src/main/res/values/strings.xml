@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">CASH Mobile</string>
+    <string name="title_activity_main">CASH Mobile</string>
+    <string name="package_name">br.com.cashmobile.app</string>
+    <string name="custom_url_scheme">br.com.cashmobile.app</string>
+</resources>

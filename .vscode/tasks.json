@@ -1,0 +1,49 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Android: atualizacao ao vivo",
+      "type": "shell",
+      "command": "npm run android:live",
+      "options": { "cwd": "${workspaceFolder}/frontend" },
+      "problemMatcher": [],
+      "presentation": { "panel": "dedicated" }
+    },
+    {
+      "label": "Android: preparar demonstracao no emulador",
+      "type": "shell",
+      "command": "npm run android:sync:dev",
+      "options": { "cwd": "${workspaceFolder}/frontend" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Android: abrir Android Studio",
+      "type": "shell",
+      "command": "npm run android:open",
+      "options": { "cwd": "${workspaceFolder}/frontend" },
+      "problemMatcher": []
+    },
+    {
+      "label": "Frontend: desenvolvimento",
+      "type": "shell",
+      "command": "npm run dev",
+      "options": { "cwd": "${workspaceFolder}/frontend" },
+      "problemMatcher": [],
+      "presentation": { "panel": "dedicated", "group": "cash-dev" }
+    },
+    {
+      "label": "Backend: desenvolvimento",
+      "type": "shell",
+      "command": ".\\mvnw.cmd spring-boot:run \"-Dspring-boot.run.profiles=local\"",
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "problemMatcher": [],
+      "presentation": { "panel": "dedicated", "group": "cash-dev" }
+    },
+    {
+      "label": "CASH: iniciar frontend e backend",
+      "dependsOn": ["Frontend: desenvolvimento", "Backend: desenvolvimento"],
+      "dependsOrder": "parallel",
+      "problemMatcher": []
+    }
+  ]
+}
