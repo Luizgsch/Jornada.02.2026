@@ -1,3 +1,5 @@
+> Atualização de 28/10/2026: modo API integrado ao Spring; armazenamento local descrito abaixo vale para local-demo. Estado atual e limites em [INTEGRACAO.md](INTEGRACAO.md). Recuperação por e-mail e biometria estão fora do escopo.
+
 # Documentos demonstrativos
 
 A rota `/documentos/` reúne os anexos já salvos nas movimentações locais. Mantém Inter, amarelo #FDC700, fundo #F5F5F4, coluna de até 384 px, raios de 12–16 px e navegação compartilhada. Não há outra base de arquivos nem dados fictícios inseridos automaticamente.
@@ -16,7 +18,7 @@ A rota `/documentos/` reúne os anexos já salvos nas movimentações locais. Ma
 
 Não há upload, sincronização, emissão de relatórios, documentos fiscais, auditoria ou acesso ao legado. Arquivos ficam no IndexedDB deste navegador/dispositivo. O documento técnico menciona relatórios e prestação de contas, mas não define um catálogo documental ou um contrato de anexos. Esses pontos precisam ser validados com a Escriba.
 
-Android: imagens têm prévia local. Download, abertura externa e compartilhamento de PDF exigem integração nativa futura, explicitada na tela. O aplicativo não apresenta um botão de download web que simule suporte nativo.
+Android: imagens têm prévia local. A ponte nativa CashDocuments agora oferece abertura externa e compartilhamento de PDF/PNG/JPEG por FileProvider. Build aprovado; verificação interativa no aparelho ainda pendente devido a falhas de inicialização do emulador API 37. Consulte ANDROID-PDF.md.
 
 ## Verificação
 

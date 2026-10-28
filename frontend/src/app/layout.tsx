@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { AuthProvider } from "@/components/auth-provider";
 import { NativeLifecycle } from "@/components/native-lifecycle";
 import { NotificationsProvider } from "@/components/notifications-provider";
 import { ProfileProvider } from "@/components/profile-provider";
@@ -31,7 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="pt-BR"
       className={`${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col"><NativeLifecycle /><NotificationsProvider><ProfileProvider>{children}</ProfileProvider></NotificationsProvider></body>
+      <body className="min-h-full flex flex-col"><NativeLifecycle /><AuthProvider basePath={process.env.PAGES_BASE_PATH ?? ""}><NotificationsProvider><ProfileProvider>{children}</ProfileProvider></NotificationsProvider></AuthProvider></body>
     </html>
   );
 }

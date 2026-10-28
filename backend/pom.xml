@@ -12,7 +12,7 @@
 	<artifactId>backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>CashMobile</name>
-	<description/>
+	<description>API demonstrativa do CASH Mobile.</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -28,8 +28,18 @@
 	</scm>
 	<properties>
 		<java.version>21</java.version>
+		<springdoc.version>3.2.0</springdoc.version>
 	</properties>
 	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>${springdoc.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>

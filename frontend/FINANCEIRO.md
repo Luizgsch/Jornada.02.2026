@@ -1,3 +1,5 @@
+> Atualização de 28/10/2026: modo API integrado ao Spring; armazenamento local descrito abaixo vale para local-demo. Estado atual e limites em [INTEGRACAO.md](INTEGRACAO.md). Recuperação por e-mail e biometria estão fora do escopo.
+
 # Financeiro: consulta gerencial demonstrativa
 
 Base: documento técnico consolidado Cash–Escriba fornecido pelo usuário, especialmente seções 2.1, 2.4 e 5.2. A interface amplia o aplicativo existente sem alterar sua identidade visual. Não existe tela Financeiro definida no Figma inspecionado.
@@ -12,7 +14,7 @@ Base: documento técnico consolidado Cash–Escriba fornecido pelo usuário, esp
 
 ## Limites
 
-Contas, receitas e orçamento são fixtures fictícias em `src/lib/financial.ts`. Movimentações são registros locais do usuário em `src/lib/movements.ts`, separados desses exemplos. O resultado local é entradas menos saídas, não saldo bancário. Os indicadores preexistentes do Início continuam sendo os números do Figma e não constituem um consolidado dessas bases demonstrativas.
+Contas, receitas e orçamento são fixtures fictícias em `src/lib/financial.ts`. Movimentações são registros locais do usuário em `src/lib/movements.ts`, separados desses exemplos. O resultado local é entradas menos saídas, não saldo bancário. O Início agora usa as mesmas contas e recebíveis de exemplo, enquanto movimentado, saldo e gráfico são calculados dos registros locais. O saldo inicial demonstrativo é zero; contas a pagar/receber não alteram o saldo automaticamente. O período demonstrativo é outubro de 2026.
 
 Não há execução de pagamentos, baixa de títulos, fechamento de caixa, autorização por perfil, auditoria, emissão fiscal, integração bancária ou consulta ao legado. O documento recomenda começar por consulta gerencial; essas operações não foram adicionadas. A integração real, os catálogos, regras de situação, perfis e contratos de API precisam ser validados com a Escriba. O login atual permanece demonstrativo.
 

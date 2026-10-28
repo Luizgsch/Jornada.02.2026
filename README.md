@@ -1,50 +1,10 @@
 # CASH Mobile
 
-## Demonstracao no GitHub Pages
+Projeto acadêmico com frontend Next.js exportado, Android com Capacitor e API Spring Boot. As seis partes do backend estão implementadas, incluindo integração das telas com a API. Banco de dados e integração com o Cash da Escriba continuam pendentes.
 
-URL: https://luizgsch.github.io/Jornada.02.2026/
+## Executar no computador
 
-O workflow `.github/workflows/pages.yml` publica o frontend estatico a cada alteracao em `frontend/` na branch `main`. O prefixo `/Jornada.02.2026` e aplicado somente no build do Pages por `PAGES_BASE_PATH`; localhost e Android continuam na raiz. Spring nao e hospedado no Pages. A pagina publica e uma demonstracao visual, sem login real.
-
-Projeto academico com interface Next.js exportada como arquivos estaticos, aplicativo Android com Capacitor e API Java/Spring Boot independente. A pagina Início reproduz o login do Figma. Preencher usuario e senha e clicar em Entrar abre `/menu/`, painel demonstrativo com valores ficticios do prototipo. Perfil permite sair da demonstracao. Nao ha autenticacao ou protecao de rota nesta etapa. Autenticacao no Spring, recuperacao, biometria e demais telas ainda estao pendentes. O progresso esta em `frontend/CHECKLIST.md`.
-
-## Estrutura
-
-```text
-frontend/
-  src/app/                 Interface responsiva
-  src/components/          Integracao do ciclo de vida Android
-  src/lib/api.ts           Acesso direto a API
-  src/lib/demo-storage.ts  Dados ficticios locais via Preferences
-  android/                 Projeto nativo para abrir no Android Studio
-  capacitor.config.ts      Identidade e diretorio de assets do aplicativo
-backend/
-  src/main/java/br/com/cashmobile/
-.vscode/tasks.json         Tarefas independentes e execucao simultanea
-```
-
-## Arquitetura e limites
-
-- Browser ou aplicativo Android chama Spring Boot por HTTP(S). O dispositivo nunca acessa o banco diretamente.
-- Next usa `output: export`. Nao usar Server Actions, cookies de servidor, endpoints Next nem rewrites. Rotas dinamicas futuras precisam funcionar com exportacao estatica; para registros criados em runtime, preferir rota estatica de detalhe com identificador em query string.
-- O APK carrega `frontend/out` localmente. Nao depende de um servidor Next para exibir a interface. Consultas a API exigem conectividade; nao foi implementada sincronizacao offline.
-- Login padrao sera implementado no Spring, fora do banco. Nenhuma credencial ou token deve entrar no bundle web, em variavel `NEXT_PUBLIC_*` ou em Preferences.
-- `demoStorage` encapsula Preferences: armazenamento nativo no Android e fallback localStorage na web. Somente dados ficticios, sem garantia de criptografia. Dados podem ser apagados ao desinstalar ou limpar o aplicativo.
-- Alvo Android: API minima 24; SDK de compilacao e alvo 36, conforme template Capacitor 8.5.3. Usar Android Studio compativel e seu JDK incorporado (21) para Gradle; nao usar automaticamente o JDK 25 global com Gradle 8.14.3.
-- Backend compila para Java 21 e foi verificado com JDK 25. Maven Wrapper evita exigir Maven global.
-- Sem JPA, banco, Swagger ou login nesta fase. Integraremos o banco do colega por meio da API depois de definir o contrato.
-
-## Desenvolvimento web
-
-### Movimentações de demonstração
-
-O botão Nova movimentação abre `/movimentacao/`. Entradas e saídas são registradas somente no IndexedDB do navegador/WebView, junto de eventual arquivo PDF, PNG ou JPG (até 5 MB). Categoria e Conta principal são opções de demonstração; ainda não há catálogo vindo da API. O Menu consulta os registros locais. Os totais do Figma continuam sendo exemplos independentes, sem cálculo contábil nesta fase.
-
-Limpar os dados do site/aplicativo apaga esses registros. Nada é enviado ao Spring ou ao Cash. Listagem no Menu mostra nome do anexo; download, edição e exclusão serão definidos em etapas futuras. Use apenas informações fictícias.
-
-Requisitos: Node 24 LTS e JDK compativel. Na raiz do VS Code, executar a tarefa **CASH: iniciar frontend e backend**. Ela abre dois terminais separados e inicia o Spring com perfil `local`.
-
-Ou em dois terminais PowerShell:
+Na raiz do VS Code, execute a tarefa **CASH: iniciar frontend e backend**. Os dois processos usam terminais separados. Ou execute, em dois terminais:
 
 ```powershell
 cd frontend
@@ -58,9 +18,34 @@ cd backend
 .\mvnw.cmd spring-boot:run "-Dspring-boot.run.profiles=local"
 ```
 
-Web: http://localhost:3000. API: http://localhost:8080. Saude: http://localhost:8080/actuator/health.
+[Aplicativo](http://localhost:3000/) · [Swagger](http://localhost:8080/swagger-ui/index.html) · [Saúde](http://localhost:8080/actuator/health).
 
-`NEXT_PUBLIC_API_URL` e publica e incorporada no build, nao um segredo. Alterar e reconstruir ao trocar de API. O antigo `BACKEND_URL` e o proxy `/api/backend` foram removidos.
+Conta pública de teste: **demo@cash.local / Cash123!**. Não use dados reais.
+
+## Modos de dados
+
+- **API**, padrão no localhost e Android: login validado no Spring, sessão temporária, movimentações e anexos na memória do backend, perfil e notificações compartilhados entre sessões da mesma conta. Reiniciar o backend apaga dados e sessões.
+- **local-demo**, definido explicitamente no workflow do Pages: demonstração independente com IndexedDB e Preferences. Não se conecta ao Spring e não representa autenticação segura. Dados locais antigos são preservados e não são enviados automaticamente à API.
+
+`NEXT_PUBLIC_DATA_MODE=api|local-demo` e `NEXT_PUBLIC_API_URL` são incorporados no build. Alterações exigem reiniciar o servidor Next ou reconstruir o aplicativo. Erros da API nunca ativam uma demonstração local automaticamente.
+
+Token permanece somente na memória JavaScript, expira em 30 minutos e é revogado no logout. Recarregar a página ou reiniciar o aplicativo exige novo login. “Lembrar acesso” guarda somente o identificador público. As rotas da interface têm bloqueio de navegação; a autorização efetiva é aplicada pelo Spring em cada consulta.
+
+Documentação de integração e validação: [frontend/INTEGRACAO.md](frontend/INTEGRACAO.md). Contratos e limites: [backend/README.md](backend/README.md). Progresso: [ETAPAS.md](ETAPAS.md).
+
+## Estrutura e práticas
+
+Um Git na raiz, com `frontend/` e `backend/` independentes para dependências, builds e execução. Next usa porta 3000; Spring, 8080. O aplicativo acessa o banco somente por meio do backend. Repositórios em memória no Spring poderão ser substituídos por implementações de banco.
+
+Next usa `output: export`, sem Server Actions ou rotas de API Next. Detalhes de registros usam rotas estáticas com identificador no fragmento. Android carrega assets locais; consultas exigem API acessível. Não existe sincronização offline.
+
+Caches, SDK, Maven, Gradle, temporários e artefatos de desenvolvimento deste ambiente ficam em `D:\Projetos\Ferramentas`. As tarefas do VS Code já fornecem os caminhos. Node 24 e Java 21 são as versões usadas na validação.
+
+## GitHub Pages
+
+[Demo pública](https://luizgsch.github.io/Jornada.02.2026/). O workflow aplica `PAGES_BASE_PATH=/Jornada.02.2026` e `NEXT_PUBLIC_DATA_MODE=local-demo`. Pages hospeda somente arquivos estáticos; não hospeda Spring, banco ou Swagger. A publicação do frontend mantém esse modo independente; a API Spring continua local.
+
+Recuperação por e-mail e biometria estão fora do escopo. A troca de senha existente é apenas simulação, sem alterar a credencial pública.
 
 ## Android
 
@@ -122,7 +107,7 @@ cd backend
 .\mvnw.cmd verify
 ```
 
-Lint, exportacao estatica, sincronizacao dos plugins/assets e testes Spring foram verificados. APK ainda precisa ser compilado e executado apos instalar Android Studio/SDK.
+Lint, exportacao estatica, sincronizacao dos plugins/assets e testes Spring foram verificados. APK debug compilado, instalado e conectado à API no emulador API 37. Login, perfil compartilhado, contador de alertas e indicador de movimentações conferidos.
 
 Auditoria inicial: zero vulnerabilidades nas dependencias de producao. Oito alertas nas ferramentas de desenvolvimento (cinco altos na cadeia ESLint/braces e tres moderados na cadeia Capacitor CLI/xcode/uuid). Nao foi aplicado downgrade automatico nem `audit fix --force`; reavaliar atualizacoes compativeis.
 

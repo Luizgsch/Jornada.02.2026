@@ -1,75 +1,32 @@
-# Reprodução do Figma
+# Checklist atual do CASH Mobile
 
-## Sequência
+## Telas e navegação
 
-- [x] Início (login) — reprodução visual concluída; autenticação pendente.
-- [x] /menu — painel financeiro demonstrativo.
-- [x] /movimentacao — nova movimentação e salvamento local.
-- [x] /notificações — lista, em `/notificacoes/` no aplicativo.
-- [x] /notificações-2 — detalhe do primeiro alerta, em `/notificacoes/detalhe/`.
+- [x] Login responsivo com exemplos públicos de acesso e preenchimento rápido.
+- [x] Início, indicadores, gráfico conectado ao modo de dados e movimentações recentes.
+- [x] Financeiro: contas a pagar, recebíveis, movimentações, receitas e orçamento.
+- [x] Notificações, leitura na API ou local-demo, detalhe e consulta da conta do alerta.
+- [x] Documentos: pesquisa, filtros, prévia de imagens e download no navegador.
+- [x] Pesquisa global nos dados do modo selecionado.
+- [x] Troca de senha demonstrativa, sem alteração de credenciais; recuperação fora do escopo.
+- [x] Perfil editável e preferências conectados à API.
+- [x] Biometria identificada como fora do escopo.
 
-## Início
+## Parte 1 — Início
 
-- [x] Inspecionar Figma ao vivo e medir fonte, cores e espaçamentos.
-- [x] Reproduzir marca, título, descrição e campos.
-- [x] Conferir primeira etapa no localhost.
-- [x] Completar opções, ações, rodapé e estados acessíveis.
-- [x] Conferir resultado mobile e desktop e corrigir diferenças.
-- [x] Validar lint e exportação estática.
+- [x] A pagar: R$ 5.240,00, soma das três contas não pagas de outubro de 2026.
+- [x] A receber: R$ 26.500,00 em duas contas fictícias, consultáveis separadamente.
+- [x] Pendências: as mesmas três contas não pagas, incluindo vencidas.
+- [x] Movimentado: entradas mais saídas locais de outubro de 2026.
+- [x] Saldo demonstrativo: saldo inicial zero mais entradas menos saídas de todos os registros locais.
+- [x] Gráfico de maio a outubro de 2026, com entradas/saídas locais e tabela acessível.
+- [x] Carregamento, vazio e erro explícitos; tentativa de recarregar dados locais.
+- [x] Valores iniciais sem lançamentos são zero, não uma série financeira inventada.
 
-Verificado em larguras de 320 e 375 px e na janela desktop. Sem rolagem horizontal. Campos com 50 px, ações com pelo menos 44 px. Usuário lembrado reaparece após recarregar; senha permanece vazia. Dados de teste removidos. Recuperação e biometria mostram avisos honestos.
+## Limites
 
-## Limites funcionais
+Login API validado pelo Spring, token temporário em memória, rotas protegidas e logout com revogação. Movimentações e anexos usam backend no modo API; IndexedDB permanece somente no modo explícito local-demo do Pages. Notificações e contas compartilham referência de outubro de 2026. Sem banco, legado, recuperação por e-mail, biometria, push ou pagamentos. Nenhuma senha é armazenada pelo frontend.
 
-Entrar valida os campos e abre `/menu/` no modo demonstrativo. Não existe autenticação real nem proteção de rota nesta fase. Recuperação e biometria explicam sua indisponibilidade. Lembrar acesso guarda somente o identificador de demonstração. Nenhuma senha é persistida. Integração de autenticação no Spring será uma etapa própria.
+Android: abertura de PDF no leitor e compartilhamento pelo seletor foram conferidos no emulador. Telas atuais, teclado na edição e retorno entre páginas foram revisados. Corrigido o carregamento direto/recarregamento de rotas no APK. O Launcher do emulador apresentou ANR na inicialização; a revisão do Cash prosseguiu após fechar o aviso. Não substitui testes em aparelho físico. Evidências e limites em `ANDROID-QA.md`.
 
-## Menu
-
-- [x] Reabrir Figma e medir cabeçalho, saldo, indicadores e resumo financeiro.
-- [x] Navegar do login ao Menu após preencher campos.
-- [x] Reproduzir cabeçalho, avatar, pesquisa, notificações e saldo oculto.
-- [x] Reproduzir indicadores com valores fictícios da referência.
-- [x] Reproduzir área de gráfico, legenda e meses sem inventar séries.
-- [x] Adicionar movimentações recentes com estado vazio explícito.
-- [x] Fixar navegação e botão Nova movimentação com espaço para rolagem.
-- [x] Adicionar avisos às ações de telas ainda não implementadas.
-- [x] Adicionar saída da demonstração no perfil.
-- [x] Conferir adaptação mobile, navegação e build final.
-
-Conferência no localhost: larguras de 320 e 375 px sem overflow horizontal; barra inferior fixada; login → Menu e perfil → login funcionando. Saldo alterna entre oculto e não informado. Avisos das ações futuras abrem e fecham. Lint e exportação estática aprovados.
-
-O Figma não informa saldo numérico nem desenha séries no gráfico. Mostrar saldo revela “Não informado”. A data, saudação e quatro indicadores são exemplos do protótipo. Área recente não fabrica movimentações. Pesquisa, áreas Financeiro/Documentos, detalhamentos e cadastro de movimentação aguardam suas próximas etapas. Sino e Alertas agora abrem notificações.
-
-## Notificações
-
-- [x] Inspecionar lista e detalhe no Figma ao vivo.
-- [x] Conectar sino e Alertas à lista.
-- [x] Reproduzir os quatro exemplos fornecidos, sem novos eventos fictícios.
-- [x] Implementar filtros Todas, Financeiras e Sistema.
-- [x] Abrir o primeiro alerta no detalhe, conforme ligação existente no protótipo.
-- [x] Marcar o primeiro alerta como lido somente ao abrir o detalhe.
-- [x] Persistir leitura localmente e compartilhar contador com sino e navegação.
-- [x] Voltar do detalhe à lista e da lista ao Menu.
-- [x] Mostrar aviso honesto ao clicar em Ver conta, cuja tela ainda não existe.
-- [x] Conferir larguras reais de 320 e 375 px sem overflow horizontal.
-- [x] Verificar filtros (2 itens por categoria), leitura persistida após reload e contador 2 → 1.
-- [x] Validar lint e build final com caminho do Pages; lista e detalhe exportados.
-
-Os demais três cartões permanecem estáticos, como na referência: não foram inventadas telas de detalhe. Todos os textos, valores e datas são exemplos históricos do Figma, sem consulta à API ou notificações push. Inicialmente dois avisos são não lidos; estado muda conforme uso local.
-
-## Movimentação
-
-- [x] Inspecionar formulário no Figma: campos, seletor de tipo, anexo e ações.
-- [x] Conectar Nova movimentação do Menu à rota `/movimentacao/`.
-- [x] Reproduzir formulário e retorno/cancelamento ao Menu.
-- [x] Validar descrição, valor positivo em centavos, data e categoria.
-- [x] Oferecer categorias de demonstração e Conta principal, pois opções reais não constam no protótipo.
-- [x] Aceitar PDF, PNG ou JPG não vazio, até 5 MB, com troca e remoção antes de salvar.
-- [x] Guardar registro e arquivo juntos no IndexedDB local, sem upload.
-- [x] Mostrar sucesso apenas após concluir gravação; preservar formulário em caso de falha.
-- [x] Mostrar registros locais no Menu; Ver todas expande a lista.
-- [x] Testar valor brasileiro, zero, negativos, precisão e limites.
-- [x] Testar gravação com anexo e persistência após recarregar.
-- [x] Conferir mobile em 320 e 375 px sem overflow; lint e exportação estática aprovados.
-
-Foi criado no navegador de teste um registro identificado como “Teste de demonstração”, R$ 125,50, com `anexo-demonstracao.png` (imagem do próprio protótipo). Não representa operação real. Totais do painel permanecem exemplos independentes do Figma; cálculo agregado e integração financeira dependem do contrato da API. Consulta/download de anexos salvos e edição/exclusão de registros ainda não fazem parte das telas fornecidas.
+Plano de execução: `../ETAPAS.md`. Detalhes por área: `FINANCEIRO.md`, `DOCUMENTOS.md`, `FLUXOS.md`, `PERFIL.md` e `ACESSO-DEMO.md`.

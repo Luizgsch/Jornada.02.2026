@@ -61,5 +61,12 @@
 .finance-shell :is(button, a, summary, input, select):focus-visible { outline: 2px solid #0a0a0a; outline-offset: 3px; }
 .finance-shell :is(input, select) { accent-color: #fdc700; caret-color: #0a0a0a; }
 .finance-shell ::selection { background: #fdc700; color: #0a0a0a; }
+.movement-record-actions { padding-top: 12px; margin-top: 12px; border-top: 1px solid #e7e5e4; }
+.movement-record-actions :is(a, button) { display: inline-flex; align-items: center; min-height: 44px; padding: 8px 0; margin-right: 12px; border: 0; background: transparent; color: #44403b; font-size: 12px; line-height: 20px; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+.movement-record-actions button { color: #a11922; }
+.movement-record-actions p { margin: 0; font-size: 12px; line-height: 20px; overflow-wrap: anywhere; }
+.movement-record-actions button:disabled { opacity: .5; cursor: wait; }
+.trash-heading { margin-top: 24px; font-size: 20px; line-height: 28px; font-weight: 800; }
+.trash-title { margin: 0; font-size: 14px; line-height: 22px; font-weight: 800; overflow-wrap: anywhere; }
 @media (hover: hover) { .finance-shell button:hover, .finance-bell:hover { background: #e7e5e4; color: #0a0a0a; } .finance-primary:hover { background: #ebba00; } .finance-bill summary:hover .finance-detail-hint { color: #0a0a0a; } }
 @media (max-width: 359px) { .finance-shell { padding-inline: 16px; } .finance-bill { padding: 12px; } .finance-totals { padding: 12px; gap: 8px; } .finance-totals dd { font-size: 15px; } .finance-status { gap: 3px; } .finance-status button { padding-inline: 6px; font-size: 11px; } }

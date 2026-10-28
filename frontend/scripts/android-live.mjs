@@ -14,7 +14,7 @@ const server = spawn(process.execPath, [
   "node_modules/next/dist/bin/next", "dev", "--hostname", "127.0.0.1", "--port", "3000",
 ], {
   stdio: "inherit",
-  env: { ...process.env, NEXT_PUBLIC_API_URL: "http://10.0.2.2:8080" },
+  env: { ...process.env, PAGES_BASE_PATH: "", NEXT_PUBLIC_DATA_MODE: "api", NEXT_PUBLIC_API_URL: "http://10.0.2.2:8080" },
 });
 
 let cleaned = false;

@@ -2,17 +2,21 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { MovementActions } from "@/components/movement-actions";
 import { AppNavigation } from "@/components/app-navigation";
 import { DashboardIcon } from "@/components/dashboard-icon";
 import { formatMoney, listMovements, type Movement } from "@/lib/movements";
-import { demoBudget, demoFinancialMonth, demoPayables, demoRevenue, financialReferenceDate, payableStatus, shortDate } from "@/lib/financial";
+import { emptyCatalog, financialCatalog } from "@/lib/finance-api";
+import { demoFinancialMonth, financialReferenceDate, payableStatus, shortDate } from "@/lib/financial";
 
-const sections = ["Contas a pagar", "Movimentações", "Receitas", "Orçamento"] as const;
+const sections = ["Contas a pagar", "A receber", "Movimentações", "Receitas", "Orçamento"] as const;
 type Section = typeof sections[number];
-export function FinancialScreen({ initialSection = "Contas a pagar" }: { initialSection?: Section }) {
+export function FinancialScreen({ initialSection = "Contas a pagar", pendingOnly = false }: { initialSection?: Section; pendingOnly?: boolean }) {
+  const [catalog, setCatalog] = useState(emptyCatalog);
+  const {payables:demoPayables,receivables:demoReceivables,revenue:demoRevenue,budget:demoBudget} = catalog;
   const [section, setSection] = useState<Section>(initialSection);
   const [month, setMonth] = useState(demoFinancialMonth);
-  const [status, setStatus] = useState("Todos");
+  const [status, setStatus] = useState(pendingOnly ? "Pendentes" : "Todos");
   const [search, setSearch] = useState("");
   const [type, setType] = useState("todos");
   const [sector, setSector] = useState("Todos");
@@ -24,11 +28,14 @@ export function FinancialScreen({ initialSection = "Contas a pagar" }: { initial
   const [attempt, setAttempt] = useState(0);
   useEffect(() => {
     let live = true;
-    listMovements().then((items) => { if (live) { setMovements(items); const requested = window.location.hash.slice(1); const match = items.find((item) => `mov-${item.id}` === requested); if (match) setMonth(match.date.slice(0, 7)); setLoading(false); setError(""); } }).catch(() => { if (live) { setLoading(false); setError("Não foi possível carregar as movimentações deste dispositivo."); } });
+    // Do not display totals from the previous period while loading.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setLoading(true);
+    Promise.all([listMovements(), financialCatalog(month)]).then(([items,data]) => { if (live) { setMovements(items); setCatalog(data); const requested = window.location.hash.slice(1); const match = items.find((item) => `mov-${item.id}` === requested); if (match) setMonth(match.date.slice(0, 7)); setLoading(false); setError(""); } }).catch(() => { if (live) { setLoading(false); setError("Não foi possível carregar os dados. Confira a conexão com a API."); } });
     return () => { live = false; };
-  }, [attempt]);
+  }, [attempt, month]);
   const payables = demoPayables.filter((item) => item.dueDate.startsWith(month));
-  const bills = payables.filter((item) => (status === "Todos" || payableStatus(item) === status) && `${item.description} ${item.supplier}`.toLocaleLowerCase("pt-BR").includes(search.toLocaleLowerCase("pt-BR")));
+  const bills = payables.filter((item) => (status === "Todos" || (status === "Pendentes" ? !item.paidDate : payableStatus(item) === status)) && `${item.description} ${item.supplier}`.toLocaleLowerCase("pt-BR").includes(search.toLocaleLowerCase("pt-BR")));
   const localMovements = movements.filter((item) => item.date.startsWith(month));
   const entries = localMovements.filter((item) => item.type === "entrada").reduce((sum, item) => sum + item.valueInCents, 0);
   const exits = localMovements.filter((item) => item.type === "saida").reduce((sum, item) => sum + item.valueInCents, 0);
@@ -44,24 +51,32 @@ export function FinancialScreen({ initialSection = "Contas a pagar" }: { initial
     <p className="finance-demo">Demonstração · dados fictícios</p>
     <form key={month} className="finance-period" onSubmit={(event) => { event.preventDefault(); const value = String(new FormData(event.currentTarget).get("month") ?? ""); if (/^\d{4}-(0[1-9]|1[0-2])$/.test(value)) setMonth(value); }}><label className="finance-month">Período<input name="month" aria-label="Período financeiro" type="month" min="1900-01" max="9999-12" defaultValue={month} required /></label><button type="submit">Aplicar</button></form>
     <div className="finance-sections" role="group" aria-label="Área financeira">{sections.map((item) => <button key={item} aria-pressed={section === item} onClick={() => selectSection(item)}>{item}</button>)}</div>
-    <section aria-labelledby="finance-section-title" className="finance-content">
+    {loading && <p role="status">Carregando dados financeiros…</p>}
+    {error && <div role="alert"><p>{error}</p><button className="finance-secondary" onClick={()=>{setLoading(true);setError("");setAttempt(v=>v+1);}}>Tentar novamente</button></div>}
+    <section aria-labelledby="finance-section-title" className="finance-content" hidden={loading || Boolean(error)}>
       <h2 id="finance-section-title">{section}</h2>
       {section === "Contas a pagar" && <>
         <p className="finance-context">Consulta de compromissos. Posição de exemplo em {shortDate(financialReferenceDate)}.</p>
         <dl className="finance-totals"><div><dt>Total em aberto</dt><dd>{formatMoney(payables.filter((item) => !item.paidDate).reduce((sum, item) => sum + item.cents, 0))}</dd></div><div><dt>Vencido</dt><dd>{formatMoney(payables.filter((item) => payableStatus(item) === "Vencido").reduce((sum, item) => sum + item.cents, 0))}</dd></div></dl>
         <label className="finance-search"><DashboardIcon name="search" /><input aria-label="Buscar conta ou fornecedor" placeholder="Buscar conta ou fornecedor" value={search} onChange={(event) => setSearch(event.target.value)} /></label>
-        <div className="finance-status" role="group" aria-label="Situação da conta">{["Todos", "Em aberto", "Vencido", "Pago"].map((item) => <button key={item} aria-pressed={status === item} onClick={() => setStatus(item)}>{item}</button>)}</div>
+        <div className="finance-status" role="group" aria-label="Situação da conta">{["Todos", "Pendentes", "Em aberto", "Vencido", "Pago"].map((item) => <button key={item} aria-pressed={status === item} onClick={() => setStatus(item)}>{item}</button>)}</div>
         <p className="finance-count" role="status">{bills.length} {bills.length === 1 ? "conta encontrada" : "contas encontradas"}</p>
         <div className="finance-list">{bills.map((item) => <details id={`conta-${item.id}`} className="finance-bill" key={item.id}><summary><span className="finance-row"><strong>{item.description}</strong><b>{formatMoney(item.cents)}</b></span><span className="finance-row finance-bill-meta"><span>Vence em {shortDate(item.dueDate)}</span><span className={`finance-badge ${payableStatus(item) === "Vencido" ? "overdue" : ""}`}>{payableStatus(item)}</span></span><span className="finance-detail-hint">Ver detalhes</span></summary><dl className="finance-detail"><div><dt>Fornecedor</dt><dd>{item.supplier}</dd></div><div><dt>Categoria</dt><dd>{item.category}</dd></div><div><dt>Conta</dt><dd>{item.account}</dd></div>{item.paidDate && <div><dt>Pagamento de exemplo</dt><dd>{shortDate(item.paidDate)}</dd></div>}</dl><p className="finance-context">Somente consulta. Nenhum pagamento é realizado pelo aplicativo.</p></details>)}</div>
         {!bills.length && <Empty title="Nenhuma conta encontrada" text="Altere o período, a busca ou a situação. Exemplos disponíveis em outubro de 2026." />}
       </>}
+      {section === "A receber" && <>
+        <p className="finance-context">Recebíveis fictícios em aberto, separados das receitas já realizadas. Não entram no saldo demonstrativo antes do registro de uma entrada.</p>
+        <p className="finance-net">Total a receber <strong>{formatMoney(demoReceivables.filter((item) => item.dueDate.startsWith(month)).reduce((sum, item) => sum + item.cents, 0))}</strong></p>
+        <div className="finance-list">{demoReceivables.filter((item) => item.dueDate.startsWith(month)).map((item) => <details key={item.id} className="finance-bill"><summary><span className="finance-row"><strong>{item.description}</strong><b>{formatMoney(item.cents)}</b></span><span className="finance-bill-meta">Vence em {shortDate(item.dueDate)} · Em aberto</span><span className="finance-detail-hint">Ver detalhes</span></summary><dl className="finance-detail"><div><dt>Pagador</dt><dd>{item.payer}</dd></div><div><dt>Origem</dt><dd>Exemplo demonstrativo</dd></div></dl><p className="finance-context">Não emite cobrança nem registra recebimento.</p></details>)}</div>
+        {!demoReceivables.some((item) => item.dueDate.startsWith(month)) && <Empty title="Sem recebíveis neste período" text="Exemplos disponíveis em outubro de 2026." />}
+      </>}
       {section === "Movimentações" && <>
-        <p className="finance-context">Registros salvos neste dispositivo. Não incluem os exemplos das outras abas.</p>
+        <p className="finance-context">Registros demonstrativos salvos. Não incluem os exemplos das outras abas.</p>
         {!loading && !error && <><dl className="finance-totals"><div><dt>Entradas no período</dt><dd>{formatMoney(entries)}</dd></div><div><dt>Saídas no período</dt><dd>{formatMoney(exits)}</dd></div></dl><p className="finance-net">Resultado do período <strong>{formatMoney(entries - exits)}</strong></p><p className="finance-context">Entradas menos saídas; não representa saldo bancário.</p></>}
-        <Link className="finance-primary" href="/movimentacao/"><DashboardIcon name="plus" />Nova movimentação</Link>
+        <Link className="finance-primary" href="/movimentacao/"><DashboardIcon name="plus" />Nova movimentação</Link><Link className="finance-secondary" href="/movimentacao/lixeira/">Ver lixeira</Link>
         <label className="finance-search"><DashboardIcon name="search" /><input aria-label="Buscar movimentação" placeholder="Buscar descrição ou categoria" value={search} onChange={(event) => setSearch(event.target.value)} /></label>
         <div className="finance-status" role="group" aria-label="Tipo de movimentação">{[{ id: "todos", label: "Todas" }, { id: "entrada", label: "Entradas" }, { id: "saida", label: "Saídas" }].map((item) => <button key={item.id} aria-pressed={type === item.id} onClick={() => setType(item.id)}>{item.label}</button>)}</div>
-        {loading ? <p role="status" className="finance-context">Carregando movimentações…</p> : error ? <div role="alert" className="finance-empty"><p>{error}</p><button className="finance-secondary" onClick={() => { setLoading(true); setError(""); setAttempt((value) => value + 1); }}>Tentar novamente</button></div> : <><p className="finance-count" role="status">{filteredMovements.length} {filteredMovements.length === 1 ? "registro encontrado" : "registros encontrados"}</p><div className="finance-list">{filteredMovements.map((item) => <details id={`mov-${item.id}`} key={item.id} className="finance-bill"><summary><span className="finance-row"><strong>{item.description}</strong><b>{item.type === "entrada" ? "+" : "−"} {formatMoney(item.valueInCents)}</b></span><span className="finance-bill-meta">{shortDate(item.date)} · {item.type === "entrada" ? "Entrada" : "Saída"}</span><span className="finance-detail-hint">Ver detalhes</span></summary><dl className="finance-detail"><div><dt>Categoria</dt><dd>{item.category}</dd></div><div><dt>Conta</dt><dd>{item.account}</dd></div>{item.notes && <div><dt>Observação</dt><dd>{item.notes}</dd></div>}{item.attachment && <div><dt>Anexo local</dt><dd>{item.attachment.name}</dd></div>}</dl></details>)}</div>{!filteredMovements.length && <Empty title="Nenhuma movimentação encontrada" text="Registre uma movimentação de demonstração ou ajuste os filtros." />}</>}
+        {loading ? <p role="status" className="finance-context">Carregando movimentações…</p> : error ? <div role="alert" className="finance-empty"><p>{error}</p><button className="finance-secondary" onClick={() => { setLoading(true); setError(""); setAttempt((value) => value + 1); }}>Tentar novamente</button></div> : <><p className="finance-count" role="status">{filteredMovements.length} {filteredMovements.length === 1 ? "registro encontrado" : "registros encontrados"}</p><div className="finance-list">{filteredMovements.map((item) => <details id={`mov-${item.id}`} key={item.id} className="finance-bill"><summary><span className="finance-row"><strong>{item.description}</strong><b>{item.type === "entrada" ? "+" : "−"} {formatMoney(item.valueInCents)}</b></span><span className="finance-bill-meta">{shortDate(item.date)} · {item.type === "entrada" ? "Entrada" : "Saída"}</span><span className="finance-detail-hint">Ver detalhes</span></summary><dl className="finance-detail"><div><dt>Categoria</dt><dd>{item.category}</dd></div><div><dt>Conta</dt><dd>{item.account}</dd></div>{item.notes && <div><dt>Observação</dt><dd>{item.notes}</dd></div>}{item.attachment && <div><dt>Anexo</dt><dd>{item.attachment.name}</dd></div>}</dl><MovementActions item={item} onTrashed={() => { setMovements((previous) => previous.filter((record) => record.id !== item.id)); setNotice("Movimentação enviada à lixeira. Você pode restaurá-la em Ver lixeira."); }} /></details>)}</div>{!filteredMovements.length && <Empty title="Nenhuma movimentação encontrada" text="Registre uma movimentação de demonstração ou ajuste os filtros." />}</>}
       </>}
       {section === "Receitas" && <>
         <p className="finance-context">Consulta por setor e funcionário. Nomes e valores de exemplo.</p>

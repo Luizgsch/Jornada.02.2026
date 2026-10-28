@@ -5,45 +5,87 @@
       "label": "Android: atualizacao ao vivo",
       "type": "shell",
       "command": "npm run android:live",
-      "options": { "cwd": "${workspaceFolder}/frontend" },
+      "options": {
+        "cwd": "${workspaceFolder}/frontend"
+      },
       "problemMatcher": [],
-      "presentation": { "panel": "dedicated" }
+      "presentation": {
+        "panel": "dedicated"
+      }
     },
     {
       "label": "Android: preparar demonstracao no emulador",
       "type": "shell",
       "command": "npm run android:sync:dev",
-      "options": { "cwd": "${workspaceFolder}/frontend" },
+      "options": {
+        "cwd": "${workspaceFolder}/frontend"
+      },
       "problemMatcher": []
     },
     {
       "label": "Android: abrir Android Studio",
       "type": "shell",
       "command": "npm run android:open",
-      "options": { "cwd": "${workspaceFolder}/frontend" },
+      "options": {
+        "cwd": "${workspaceFolder}/frontend"
+      },
       "problemMatcher": []
     },
     {
       "label": "Frontend: desenvolvimento",
       "type": "shell",
       "command": "npm run dev",
-      "options": { "cwd": "${workspaceFolder}/frontend" },
+      "options": {
+        "cwd": "${workspaceFolder}/frontend"
+      },
       "problemMatcher": [],
-      "presentation": { "panel": "dedicated", "group": "cash-dev" }
+      "presentation": {
+        "panel": "dedicated",
+        "group": "cash-dev"
+      }
     },
     {
       "label": "Backend: desenvolvimento",
       "type": "shell",
       "command": ".\\mvnw.cmd spring-boot:run \"-Dspring-boot.run.profiles=local\"",
-      "options": { "cwd": "${workspaceFolder}/backend" },
+      "options": {
+        "cwd": "${workspaceFolder}/backend"
+      },
       "problemMatcher": [],
-      "presentation": { "panel": "dedicated", "group": "cash-dev" }
+      "presentation": {
+        "panel": "dedicated",
+        "group": "cash-dev"
+      }
     },
     {
       "label": "CASH: iniciar frontend e backend",
-      "dependsOn": ["Frontend: desenvolvimento", "Backend: desenvolvimento"],
+      "dependsOn": [
+        "Frontend: desenvolvimento",
+        "Backend: desenvolvimento"
+      ],
       "dependsOrder": "parallel",
       "problemMatcher": []
     }
-  ]
+  ],
+  "options": {
+    "env": {
+      "XDG_CACHE_HOME": "D:\\Projetos\\Ferramentas\\Caches",
+      "MAVEN_USER_HOME": "D:\\Projetos\\Ferramentas\\Maven",
+      "PIP_CACHE_DIR": "D:\\Projetos\\Ferramentas\\Caches\\pip",
+      "TMP": "D:\\Projetos\\Ferramentas\\Temp",
+      "TMPDIR": "D:\\Projetos\\Ferramentas\\Temp",
+      "UV_CACHE_DIR": "D:\\Projetos\\Ferramentas\\Caches\\uv",
+      "ANDROID_USER_HOME": "D:\\Projetos\\Ferramentas\\Android\\User",
+      "GRADLE_USER_HOME": "D:\\Projetos\\Ferramentas\\Gradle",
+      "ANDROID_AVD_HOME": "D:\\Projetos\\Ferramentas\\Android\\User\\avd",
+      "JAVA_HOME": "D:\\Projetos\\Ferramentas\\JDKs\\jbr-21.0.11",
+      "ANDROID_HOME": "D:\\Projetos\\Ferramentas\\Android\\Sdk",
+      "TEMP": "D:\\Projetos\\Ferramentas\\Temp",
+      "NPM_CONFIG_CACHE": "D:\\Projetos\\Ferramentas\\npm-cache",
+      "ANDROID_EMULATOR_HOME": "D:\\Projetos\\Ferramentas\\Android\\User",
+      "NPM_CONFIG_PREFIX": "D:\\Projetos\\Ferramentas\\npm-global",
+      "ANDROID_SDK_ROOT": "D:\\Projetos\\Ferramentas\\Android\\Sdk",
+      "CASH_UPLOAD_TEMP": "D:\\Projetos\\Ferramentas\\Temp"
+    }
+  }
 }

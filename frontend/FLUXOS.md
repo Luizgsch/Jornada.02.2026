@@ -1,3 +1,5 @@
+> Atualização de 28/10/2026: modo API integrado ao Spring; armazenamento local descrito abaixo vale para local-demo. Estado atual e limites em [INTEGRACAO.md](INTEGRACAO.md). Recuperação por e-mail e biometria estão fora do escopo.
+
 # Consulta de conta, pesquisa e recuperação demonstrativa
 
 - `/financeiro/conta/`: abre pelo botão Ver conta da notificação. Preserva aluguel de R$ 4.200,00 e vencimento em 15/06/2025 do Figma; não confunde essa fixture com as contas de outubro de 2026. Não permite pagamento nem inventa fornecedor/histórico.

@@ -17,6 +17,6 @@ if (!["http:", "https:"].includes(url.protocol) || url.username || url.password)
 
 const result = spawnSync(process.execPath, ["node_modules/next/dist/bin/next", "build"], {
   stdio: "inherit",
-  env: { ...process.env, NEXT_PUBLIC_API_URL: url.origin },
+  env: { ...process.env, PAGES_BASE_PATH: "", NEXT_PUBLIC_DATA_MODE: "api", NEXT_PUBLIC_API_URL: url.origin },
 });
 process.exit(result.status ?? 1);

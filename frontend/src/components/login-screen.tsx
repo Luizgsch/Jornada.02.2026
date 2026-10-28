@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { demoStorage } from "@/lib/demo-storage";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { useAuth } from "@/components/auth-provider";
+import { apiMode } from "@/lib/session";
 
 function UserIcon() {
   return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><circle cx="12" cy="8" r="3.5" /><path d="M5 21v-2a7 7 0 0 1 14 0v2" /></svg>;
@@ -13,9 +14,7 @@ function LockIcon() {
   return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2" /><path d="M8 10V6a4 4 0 0 1 8 0v4" /></svg>;
 }
 
-function FingerprintIcon() {
-  return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M8 3.8a9 9 0 0 1 13 8.1v2M3 12a9 9 0 0 1 2-5.7M6 15v-3a6 6 0 0 1 12 0v3a11 11 0 0 1-1 4.6M3 15v1M9 19a15 15 0 0 0 0-7 3 3 0 0 1 6 0v3a15 15 0 0 1-1.3 6M12 12v3a18 18 0 0 1-1 6M6 18a12 12 0 0 1-1 3" /></svg>;
-}
+
 
 function ShieldIcon() {
   return <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m12 3 8 3v6c0 4.5-5 7.8-8 9-3-1.2-8-4.5-8-9V6l8-3Z" /><path d="m8.5 12 2.5 2.5 4.5-5" /></svg>;
@@ -25,6 +24,8 @@ const rememberedUserKey = "remembered-username";
 
 export function LoginScreen() {
   const router = useRouter();
+  const { login } = useAuth();
+  const [pending, setPending] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
@@ -50,7 +51,7 @@ export function LoginScreen() {
     }
   }
 
-  function submit(event: FormEvent<HTMLFormElement>) {
+  async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const nextErrors = {
       username: username.trim() ? undefined : "Informe seu usuário ou e-mail.",
@@ -60,9 +61,11 @@ export function LoginScreen() {
     setFeedback("");
     if (nextErrors.username) { usernameRef.current?.focus(); return; }
     if (nextErrors.password) { passwordRef.current?.focus(); return; }
-    void saveRememberedUser(remember, username);
-    setPassword("");
-    router.push("/menu/");
+    if (pending) return;
+    setPending(true);
+    try { await login(username, password); await saveRememberedUser(remember, username); setPassword(""); router.push("/menu/"); }
+    catch (error) { setFeedback(error instanceof Error ? error.message : "Falha ao entrar."); }
+    finally { setPending(false); }
   }
 
   return (
@@ -84,11 +87,10 @@ export function LoginScreen() {
             <div className="input-wrap"><LockIcon /><input ref={passwordRef} id="password" name="password" type="password" placeholder="Digite sua senha" autoComplete="current-password" maxLength={128} required value={password} onChange={(event) => { setPassword(event.target.value); setErrors((previous) => ({ ...previous, password: undefined })); setFeedback(""); }} aria-invalid={Boolean(errors.password)} aria-describedby={errors.password ? "password-error" : undefined} /></div>
             {errors.password && <p className="field-error" id="password-error">{errors.password}</p>}
           </div>
-          <div className="login-options"><label className="remember-access"><input type="checkbox" checked={remember} onChange={(event) => { setRemember(event.target.checked); void saveRememberedUser(event.target.checked, username); }} /> <span>Lembrar acesso</span></label><Link className="text-button" href="/recuperar-senha/">Esqueci minha senha</Link></div>
-          <button className="sign-in-button" type="submit">Entrar</button>
-          <button className="biometric-button" type="button" onClick={() => setFeedback("A biometria será implementada em breve.")}><FingerprintIcon />Acessar com biometria</button>
+          <div className="login-options"><label className="remember-access"><input type="checkbox" checked={remember} onChange={(event) => { setRemember(event.target.checked); void saveRememberedUser(event.target.checked, username); }} /> <span>Lembrar acesso</span></label></div>
+          <button className="sign-in-button" type="submit" disabled={pending}>{pending ? "Entrando…" : "Entrar"}</button>
           <p className="login-feedback" role="status" aria-live="polite">{feedback}</p>
-          <aside className="login-demo-access" aria-label="Acesso de teste"><strong>Acesso de teste</strong><dl><div><dt>Usuário</dt><dd>demo@cash.local</dd></div><div><dt>Senha</dt><dd>Cash123!</dd></div></dl><button type="button" onClick={() => { setUsername("demo@cash.local"); setPassword("Cash123!"); setErrors({}); setFeedback(""); }}>Preencher dados de teste</button><p>Acesso demonstrativo, sem autenticação real. Não use credenciais pessoais.</p></aside>
+          <aside className="login-demo-access" aria-label="Acesso de teste"><strong>Acesso de teste</strong><dl><div><dt>Usuário</dt><dd>demo@cash.local</dd></div><div><dt>Senha</dt><dd>Cash123!</dd></div></dl><button type="button" onClick={() => { setUsername("demo@cash.local"); setPassword("Cash123!"); setErrors({}); setFeedback(""); }}>Preencher dados de teste</button><p>{apiMode ? "Demonstração conectada à API. Sessão temporária; dados em memória no servidor." : "Demonstração local, sem API. Dados neste dispositivo."} Não use credenciais pessoais.</p></aside>
         </form>
       </div>
       <footer className="login-footer"><ShieldIcon /><span>Demonstração acadêmica. Sem dados reais.</span></footer>

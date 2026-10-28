@@ -31,8 +31,10 @@ jobs:
       - uses: actions/configure-pages@v5
       - run: npm ci
       - run: npm run lint
+      - run: npm run test:api
       - run: npm run build
         env:
+          NEXT_PUBLIC_DATA_MODE: local-demo
           PAGES_BASE_PATH: /Jornada.02.2026
       - uses: actions/upload-pages-artifact@v4
         with:

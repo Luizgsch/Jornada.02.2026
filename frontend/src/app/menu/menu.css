@@ -54,3 +54,21 @@
 
 
 .dashboard-greeting h1 { overflow-wrap: anywhere; }
+.dashboard-greeting p { white-space: normal; }
+.indicator-card { color: #0a0a0a; text-decoration: none; }
+.indicator-card:hover { border-color: #a8a29e; }
+.balance-explanation { margin: 12px 0 0; color: #57534e; font-size: 11px; line-height: 18px; }
+.summary-chart { height: auto; min-height: 240px; margin-inline: 0; margin-bottom: 0; gap: 12px; }
+.chart-caption { margin: 0; color: #57534e; font-size: 11px; line-height: 18px; }
+.chart-bars { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+.chart-pair { display: flex; align-items: flex-end; justify-content: center; gap: 4px; height: 100px; border-bottom: 1px solid #d6d3d1; }
+.chart-bar { width: 12px; max-width: 40%; border-radius: 3px 3px 0 0; }
+.chart-entry { background: #fdc700; }
+.chart-exit { background: #0a0a0a; }
+.chart-month > span { display: block; margin-top: 8px; color: #57534e; text-align: center; font-size: 11px; line-height: 16px; }
+.chart-data { margin-top: 8px; }
+.chart-data summary { display: flex; align-items: center; min-height: 44px; color: #44403b; font-size: 12px; font-weight: 700; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+.chart-data table { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 11px; line-height: 18px; font-variant-numeric: tabular-nums; }
+.chart-data caption { text-align: left; margin-bottom: 8px; color: #57534e; }
+.chart-data :is(th, td) { padding: 8px 2px; border-bottom: 1px solid #d6d3d1; overflow-wrap: anywhere; text-align: right; }
+.chart-data th:first-child { text-align: left; width: 40px; }

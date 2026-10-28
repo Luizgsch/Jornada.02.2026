@@ -11,7 +11,8 @@
     "android:build": "node scripts/build-android.mjs",
     "android:sync:dev": "npm run android:build:dev && cap sync android",
     "android:sync": "npm run android:build && cap sync android",
-    "android:open": "cap open android"
+    "android:open": "cap open android",
+    "test:api": "node scripts/test-api.mjs"
   },
   "dependencies": {
     "@capacitor/android": "8.5.3",

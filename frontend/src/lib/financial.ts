@@ -21,4 +21,8 @@ export const demoBudget = [
   { category: "Tecnologia", planned: 100000, actual: 89000 },
 ];
 export const demoFinancialMonth = "2026-10";
+export const demoReceivables = [
+  { id: "receber-notas", description: "Serviços de notas", payer: "Cliente A (exemplo)", dueDate: "2026-10-25", cents: 1800000 },
+  { id: "receber-registro", description: "Serviços de registro", payer: "Cliente B (exemplo)", dueDate: "2026-10-30", cents: 850000 },
+];
 export function shortDate(value: string) { return value.split("-").reverse().join("/"); }

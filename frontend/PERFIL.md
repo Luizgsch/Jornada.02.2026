@@ -1,3 +1,5 @@
+> Atualização de 28/10/2026: modo API integrado ao Spring; armazenamento local descrito abaixo vale para local-demo. Estado atual e limites em [INTEGRACAO.md](INTEGRACAO.md). Recuperação por e-mail e biometria estão fora do escopo.
+
 # Perfil demonstrativo
 
 `/perfil/` reúne dados fictícios editáveis: nome completo, e-mail, telefone opcional e cartório. O perfil de acesso é um exemplo de responsável financeiro, não uma permissão real. A navegação Perfil e o avatar do painel abrem essa página.
